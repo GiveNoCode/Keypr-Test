@@ -1,7 +1,13 @@
 <resources>
-    <string name="app_name">KeyprTest</string>
+    <string name="app_name">KEYPR Test</string>
     <string name="status_inside">Status: inside</string>
     <string name="status_outside">Status: outside</string>
     <string name="title_activity_settings">Settings</string>
+    <string name="wifiNameHint">WiFi Name</string>
+    <string name="locationLatHint">Latitude</string>
+    <string name="locationLonHint">Longitude</string>
+    <string name="locationSectionTitle">Location:</string>
+    <string name="wifiSectionTitle">WiFi network:</string>
+    <string name="locationRadiusHint">Radius(m)</string>
 
 </resources>

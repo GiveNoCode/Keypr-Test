@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="status_text_size">28sp</dimen>
+    <dimen name="screen_items_padding">8dp</dimen>
+    <dimen name="screen_items_margin">4dp</dimen>
+    <dimen name="screen_sections_padding">12dp</dimen>
+    <dimen name="status_min_height">240dp</dimen>
+</resources>
