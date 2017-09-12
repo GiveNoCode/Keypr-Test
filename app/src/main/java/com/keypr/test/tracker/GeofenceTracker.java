@@ -1,5 +1,9 @@
 package com.keypr.test.tracker;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+
 import com.keypr.test.datastore.KeyValueStorage;
 
 public class GeofenceTracker {
@@ -21,10 +25,17 @@ public class GeofenceTracker {
 	 */
 	public void startTracking(Listener listener) {
 		this.listener = listener;
+		wifiMonitor.startTracking(new BroadcastReceiver() {
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				check();
+			}
+		});
 	}
 	
 	public void stopTracking() {
 		this.listener = null;
+		wifiMonitor.stopTracking();
 	}
 	
 	/**
