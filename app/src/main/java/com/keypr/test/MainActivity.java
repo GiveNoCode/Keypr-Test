@@ -2,10 +2,14 @@ package com.keypr.test;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.widget.EditText;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity {
+import com.keypr.test.datastore.PreferencesStorage;
+
+public class MainActivity extends AppCompatActivity implements MainView {
 	
 	private TextView tvStatus;
 	private EditText etLocationLat;
@@ -13,12 +17,59 @@ public class MainActivity extends AppCompatActivity {
 	private EditText etLocationRadius;
 	private EditText etWifiName;
 	
+	private MainPresenter presenter;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		bindViews();
 		
+		presenter = (MainPresenter) getLastCustomNonConfigurationInstance();
+		if (presenter == null) {
+			presenter = new MainPresenter(new PreferencesStorage(getApplicationContext()));
+		}
+		presenter.attachView(this);
+		
+		etLocationLat.addTextChangedListener(new TextChangedListener() {
+			@Override
+			public void afterTextChanged(Editable s) {
+				// TODO validate input
+				// TODO get rid of try catch. I use it here to save time
+				try {
+					presenter.getStorage().saveLocationLat(Float.parseFloat(s.toString()));
+				} catch (Exception e) {
+				}
+			}
+		});
+		
+		etLocationLon.addTextChangedListener(new TextChangedListener() {
+			@Override
+			public void afterTextChanged(Editable s) {
+				try {
+					presenter.getStorage().saveLocationLat(Float.parseFloat(s.toString()));
+				} catch (Exception e) {
+				}
+			}
+		});
+		
+		etLocationRadius.addTextChangedListener(new TextChangedListener() {
+			@Override
+			public void afterTextChanged(Editable s) {
+				
+				try {
+					presenter.getStorage().saveRadius(Float.parseFloat(s.toString()));
+				} catch (Exception e) {
+				}
+			}
+		});
+		
+		etWifiName.addTextChangedListener(new TextChangedListener() {
+			@Override
+			public void afterTextChanged(Editable s) {
+				presenter.getStorage().saveWifiName(s.toString());
+			}
+		});
 		
 	}
 	
@@ -29,5 +80,76 @@ public class MainActivity extends AppCompatActivity {
 		etLocationRadius = (EditText) findViewById(R.id.etLocationRadius);
 		etWifiName = (EditText) findViewById(R.id.etWifiName);
 		
+	}
+	
+	@Override
+	public Object onRetainCustomNonConfigurationInstance() {
+		// Save presenter between config changes
+		return presenter;
+	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		presenter.detachView();
+	}
+	
+	@Override
+	public void showStatusInside() {
+		tvStatus.setText(R.string.status_inside);
+	}
+	
+	@Override
+	public void showStatusOutside() {
+		tvStatus.setText(R.string.status_outside);
+	}
+	
+	@Override
+	public void showLocationLat(float locationLat) {
+		if (locationLat < 0) {
+			etLocationLat.setText("");
+		} else {
+			etLocationLat.setText(String.valueOf(locationLat));
+		}
+	}
+	
+	@Override
+	public void showLocationLon(float locationLon) {
+		if (locationLon < 0) {
+			etLocationLon.setText("");
+		} else {
+			etLocationLon.setText(String.valueOf(locationLon));
+		}
+	}
+	
+	@Override
+	public void showLocationRadius(float locationRadius) {
+		if (locationRadius < 0) {
+			etLocationRadius.setText("");
+		} else {
+			etLocationRadius.setText(String.valueOf(locationRadius));
+		}
+	}
+	
+	@Override
+	public void showWifiName(String wifiName) {
+		if (wifiName == null) {
+			etWifiName.setText("");
+		} else {
+			etWifiName.setText(wifiName);
+		}
+	}
+	
+	static abstract class TextChangedListener implements TextWatcher {
+		
+		@Override
+		public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+			
+		}
+		
+		@Override
+		public void onTextChanged(CharSequence s, int start, int before, int count) {
+			
+		}
 	}
 }

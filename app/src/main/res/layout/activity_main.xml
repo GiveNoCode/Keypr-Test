@@ -28,6 +28,13 @@
             android:orientation="vertical"
             android:padding="@dimen/screen_items_padding">
 
+            <!-- Stub view to request focus -->
+            <View
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:layout_width="0dp"
+                android:layout_height="0dp"/>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -53,7 +60,8 @@
                         android:hint="@string/locationLatHint"
                         android:inputType="numberDecimal"
                         android:nextFocusForward="@+id/etLocationLon"
-                        android:nextFocusRight="@+id/etLocationLon"/>
+                        android:nextFocusDown="@+id/etLocationLon"
+                        android:nextFocusRight="@id/etLocationLon"/>
 
                 </android.support.design.widget.TextInputLayout>
 
