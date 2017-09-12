@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">KeyprTest</string>
+    <string name="status_inside">Status: inside</string>
+    <string name="status_outside">Status: outside</string>
+    <string name="title_activity_settings">Settings</string>
+
+</resources>
