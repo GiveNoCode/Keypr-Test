@@ -1,5 +1,6 @@
 package com.keypr.test;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -7,7 +8,11 @@ import android.text.TextWatcher;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.keypr.test.datastore.KeyValueStorage;
 import com.keypr.test.datastore.PreferencesStorage;
+import com.keypr.test.tracker.GeofenceTracker;
+import com.keypr.test.tracker.LocationMonitor;
+import com.keypr.test.tracker.WifiMonitor;
 
 public class MainActivity extends AppCompatActivity implements MainView {
 	
@@ -27,7 +32,10 @@ public class MainActivity extends AppCompatActivity implements MainView {
 		
 		presenter = (MainPresenter) getLastCustomNonConfigurationInstance();
 		if (presenter == null) {
-			presenter = new MainPresenter(new PreferencesStorage(getApplicationContext()));
+			// Initialize and inject dependencies via constructors
+			Context context = getApplicationContext();
+			KeyValueStorage storage = new PreferencesStorage(context);
+			presenter = new MainPresenter(storage, new GeofenceTracker(storage, new WifiMonitor(context), new LocationMonitor()));
 		}
 		presenter.attachView(this);
 		
@@ -80,6 +88,18 @@ public class MainActivity extends AppCompatActivity implements MainView {
 		etLocationRadius = (EditText) findViewById(R.id.etLocationRadius);
 		etWifiName = (EditText) findViewById(R.id.etWifiName);
 		
+	}
+	
+	@Override
+	protected void onStart() {
+		super.onStart();
+		presenter.startTracking();
+	}
+	
+	@Override
+	protected void onStop() {
+		super.onStop();
+		presenter.stopTracking();
 	}
 	
 	@Override
