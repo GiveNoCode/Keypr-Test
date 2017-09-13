@@ -8,6 +8,8 @@
     <string name="locationLonHint">Longitude</string>
     <string name="locationSectionTitle">Location:</string>
     <string name="wifiSectionTitle">WiFi network:</string>
-    <string name="locationRadiusHint">Radius(m)</string>
+    <string name="locationRadiusHint">Radius(km)</string>
+    <string name="title_location_permission">Location disabled</string>
+    <string name="text_location_permission">Please grant location permission</string>
 
 </resources>

@@ -31,11 +31,18 @@ public class GeofenceTracker {
 				check();
 			}
 		});
+		locationMonitor.startTracking(new LocationMonitor.LocationChangedListener() {
+			@Override
+			public void onLocationChanged() {
+				check();
+			}
+		});
 	}
 	
 	public void stopTracking() {
 		this.listener = null;
 		wifiMonitor.stopTracking();
+		locationMonitor.stopTracking();
 	}
 	
 	/**
@@ -44,6 +51,10 @@ public class GeofenceTracker {
 	public void check() {
 		listener.onStateChanged(wifiMonitor.checkWiFi(storage.getWifiName())
 				|| locationMonitor.checkLocation(storage.getLocationLat(), storage.getLocationLon(), storage.getRadius()));
+	}
+	
+	public LocationMonitor getLocationMonitor() {
+		return locationMonitor;
 	}
 	
 	public interface Listener {

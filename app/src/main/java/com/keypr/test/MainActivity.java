@@ -2,6 +2,7 @@ package com.keypr.test;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -35,9 +36,10 @@ public class MainActivity extends AppCompatActivity implements MainView {
 			// Initialize and inject dependencies via constructors
 			Context context = getApplicationContext();
 			KeyValueStorage storage = new PreferencesStorage(context);
-			presenter = new MainPresenter(storage, new GeofenceTracker(storage, new WifiMonitor(context), new LocationMonitor()));
+			presenter = new MainPresenter(storage, new GeofenceTracker(storage, new WifiMonitor(context), new LocationMonitor(context)));
 		}
 		presenter.attachView(this);
+		presenter.getLocationMonitor().attachActivity(this);
 		
 		etLocationLat.addTextChangedListener(new TextChangedListener() {
 			@Override
@@ -112,6 +114,13 @@ public class MainActivity extends AppCompatActivity implements MainView {
 	protected void onDestroy() {
 		super.onDestroy();
 		presenter.detachView();
+		presenter.getLocationMonitor().detachActivity();
+	}
+	
+	@Override
+	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+		presenter.getLocationMonitor().onRequestPermissionResult(requestCode, permissions, grantResults);
 	}
 	
 	@Override

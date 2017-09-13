@@ -2,6 +2,7 @@ package com.keypr.test;
 
 import com.keypr.test.datastore.KeyValueStorage;
 import com.keypr.test.tracker.GeofenceTracker;
+import com.keypr.test.tracker.LocationMonitor;
 
 public class MainPresenter {
 	
@@ -64,5 +65,9 @@ public class MainPresenter {
 	 */
 	public KeyValueStorage getStorage() {
 		return storage;
+	}
+	
+	public LocationMonitor getLocationMonitor() {
+		return tracker.getLocationMonitor();
 	}
 }
